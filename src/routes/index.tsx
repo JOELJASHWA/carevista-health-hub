@@ -347,6 +347,9 @@ function Overview() {
         }
       />
 
+      {/* CareVista AI Assistant */}
+      <CareVistaAIOverview />
+
       <DemoNote />
 
 
@@ -959,9 +962,6 @@ function Overview() {
           </Panel>
         </div>
       </section>
-
-      {/* CareVista AI Assistant */}
-      <CareVistaAIOverview />
 
       {/* Recent admissions and critical alerts */}
       <section className="grid min-w-0 gap-5 xl:grid-cols-3">
