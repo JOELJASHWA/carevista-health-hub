@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## CareVista architecture
+- Keep the imported TanStack file routes and shared application store; preserve original store and type modules so the source data and behavior remain intact.
+- Retain the source TypeScript optional-property and indexed-access settings with strict mode enabled, because source store/types must remain unmodified.
+- Keep Gemini requests in server-only helpers reached through server functions; client action parsing only stages proposals and execution remains gated by explicit UI confirmation.
+- Resolve imported medical media through asset pointers without rewriting the source dataset.
