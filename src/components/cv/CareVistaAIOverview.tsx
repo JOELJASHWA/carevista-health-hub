@@ -41,7 +41,7 @@ type ChatMessage = {
   content: string;
 };
 
-export function CareVistaAIOverview({ initialQuestions }: { initialQuestions?: readonly string[] } = {}) {
+export function CareVistaAIOverview({ initialQuestions, hideModules = false }: { initialQuestions?: readonly string[]; hideModules?: boolean } = {}) {
   const s = useAppState();
   const askAI = useServerFn(askCareVistaAI);
   const historyRef = useRef<HTMLDivElement>(null);
@@ -850,7 +850,7 @@ IMPORTANT INSTRUCTIONS:
 
       <div className="space-y-4 p-4 sm:p-5">
         {/* FIVE MODULES */}
-        <div className="module-strip">
+        {!hideModules && (<div className="module-strip">
           {[
             {
               title: "Patient Records",
@@ -898,7 +898,7 @@ IMPORTANT INSTRUCTIONS:
               </div>
             );
           })}
-        </div>
+        </div>)}
 
         {/* QUICK QUESTIONS */}
         <div>

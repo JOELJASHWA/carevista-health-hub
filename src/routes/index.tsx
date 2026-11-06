@@ -348,7 +348,7 @@ function Overview() {
       />
 
       {/* CareVista AI Assistant */}
-      <CareVistaAIOverview />
+      <CareVistaAIOverview hideModules />
 
       <DemoNote />
 
