@@ -131,6 +131,8 @@ export function CareVistaAIOverview({ initialQuestions }: { initialQuestions?: r
         total: s.beds.length,
         occupied: occupiedBeds,
         available: availableBeds,
+        reserved: s.beds.filter((b) => b.status === "Reserved").length,
+        maintenance: s.beds.filter((b) => b.status === "Maintenance").length,
         occupancyPercentage:
           s.beds.length > 0
             ? Math.round((occupiedBeds / s.beds.length) * 100)
