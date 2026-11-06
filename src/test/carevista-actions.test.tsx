@@ -9,33 +9,33 @@ import { getState, updateDoctor } from "@/store/store";
 import { parseCareVistaAction } from "@/lib/carevista-actions";
 
 describe("CareVista explicit action approval", () => {
-  beforeEach(() => { cleanup(); updateDoctor("DOC-001", { availability: "Available" }); });
+  beforeEach(() => { cleanup(); updateDoctor("DR-001", { availability: "Available" }); });
 
   const propose = async () => {
     render(<CareVistaAIOverview />);
     fireEvent.change(screen.getByRole("textbox", { name: "Message CareVista AI" }), {
-      target: { value: 'set doctor doctorId=DOC-001 availability="On Leave"' },
+      target: { value: 'set doctor doctorId=DR-001 availability="On Leave"' },
     });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
-    await screen.findByRole("button", { name: "Confirm", exact: true });
+    await screen.findByRole("button", { name: "Confirm" });
   };
 
   it("stages an action without changing the record before confirmation", async () => {
     await propose();
-    expect(getState().doctors.find(d => d.id === "DOC-001")?.availability).toBe("Available");
+    expect(getState().doctors.find(d => d.id === "DR-001")?.availability).toBe("Available");
   });
 
   it("Cancel does not modify any hospital records", async () => {
     const before = JSON.stringify(getState());
     await propose();
-    fireEvent.click(screen.getByRole("button", { name: "Cancel", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(JSON.stringify(getState())).toBe(before);
   });
 
   it("Confirm executes the proposed supported action", async () => {
     await propose();
-    fireEvent.click(screen.getByRole("button", { name: "Confirm", exact: true }));
-    expect(getState().doctors.find(d => d.id === "DOC-001")?.availability).toBe("On Leave");
+    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
+    expect(getState().doctors.find(d => d.id === "DR-001")?.availability).toBe("On Leave");
   });
 
   it("ordinary conversational text never becomes an executable action", () => {
