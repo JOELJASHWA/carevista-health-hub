@@ -1,0 +1,11 @@
+{
+  "source": "carevista-healthcare-platform-main-main.zip",
+  "capabilities": [
+    {"capability":"application code and routes","source":"uploaded archive","outcome":"import existing TanStack application","status":"in_progress","next_action":"copy inspected source and preserve target runtime"},
+    {"capability":"hospital records and state","source":"source store and seeded dataset","outcome":"preserve existing store and data without alteration","status":"in_progress","next_action":"inspect persistence and verify record workflows"},
+    {"capability":"Gemini integration","source":"source AI server functions","outcome":"preserve provider and server-only configuration","status":"pending","next_action":"verify configuration securely"},
+    {"capability":"AI action confirmation","source":"source parser and execution UI","outcome":"preserve confirmation and cancellation gates","status":"in_progress","next_action":"audit and test supported actions"},
+    {"capability":"design and responsive views","source":"uploaded redesign brief","outcome":"Midnight Indigo theme on existing components","status":"in_progress","next_action":"apply tokens and verify desktop and phone"},
+    {"capability":"production verification","source":"imported application","outcome":"test routes, records and AI","status":"pending","next_action":"run tests and browser flows"}
+  ]
+}
