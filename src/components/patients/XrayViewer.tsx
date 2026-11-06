@@ -5,6 +5,7 @@ import { DemoNote, EmptyState } from "@/components/cv/common";
 import type { XrayImage } from "@/data/types";
 import { fmtDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { resolveMedia } from "@/lib/media";
 
 export function XrayViewer({ images }: { images: XrayImage[] }) {
   const [idx, setIdx] = useState(0);
@@ -47,7 +48,7 @@ export function XrayViewer({ images }: { images: XrayImage[] }) {
             </div>
           </div>
           <div
-            className={cn("relative h-[420px] touch-none overflow-hidden bg-black select-none md:h-[520px]", scale > 1 ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in")}
+            className={cn("relative h-[420px] touch-none overflow-hidden bg-imaging select-none md:h-[520px]", scale > 1 ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in")}
             onWheel={(e) => setScale((s) => Math.min(5, Math.max(0.5, s * (e.deltaY < 0 ? 1.1 : 0.9))))}
             onDoubleClick={() => setScale((s) => (s > 1 ? 1 : 2))}
             onPointerDown={(e) => {
@@ -61,7 +62,7 @@ export function XrayViewer({ images }: { images: XrayImage[] }) {
             onPointerUp={() => (drag.current = null)}
           >
             <img
-              src={img.src}
+              src={resolveMedia(img.src)}
               alt={`${img.region} ${img.view} demonstration radiograph`}
               draggable={false}
               className="absolute inset-0 m-auto h-full w-full object-contain transition-transform duration-75"
@@ -80,8 +81,8 @@ export function XrayViewer({ images }: { images: XrayImage[] }) {
           </div>
           <div className="grid grid-cols-3 gap-2 lg:grid-cols-2">
             {images.map((im, i) => (
-              <button key={im.id} onClick={() => { setIdx(i); reset(); }} className={cn("overflow-hidden rounded-lg border-2 bg-black", i === idx ? "border-primary" : "border-transparent opacity-70 hover:opacity-100")} aria-label={`Show ${im.region} image`}>
-                <img src={im.src} alt="" className="aspect-square w-full object-cover" loading="lazy" />
+              <button key={im.id} onClick={() => { setIdx(i); reset(); }} className={cn("overflow-hidden rounded-lg border-2 bg-imaging", i === idx ? "border-primary" : "border-transparent opacity-70 hover:opacity-100")} aria-label={`Show ${im.region} image`}>
+                <img src={resolveMedia(im.src)} alt="" className="aspect-square w-full object-cover" loading="lazy" />
               </button>
             ))}
           </div>

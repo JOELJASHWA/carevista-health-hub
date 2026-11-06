@@ -22,6 +22,9 @@ import {
 import { useAppState } from "@/store/store";
 import { askCareVistaAI } from "@/lib/ai.functions";
 import { toast } from "sonner";
+import { CareVistaAIOverview } from "@/components/cv/CareVistaAIOverview";
+import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/ai-assistant")({
   head: () => ({
@@ -29,8 +32,12 @@ export const Route = createFileRoute("/ai-assistant")({
       { title: "AI Assistant – CareVista" },
       {
         name: "description",
-        content: "AI-powered healthcare intelligence assistant.",
+        content: "CareVista Gemini assistant for patient records, appointments, doctor schedules, medical education and hospital analytics.",
       },
+      { property: "og:title", content: "CareVista AI Assistant" },
+      { property: "og:description", content: "Hospital intelligence with five AI modules and confirmation-first record changes." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AIAssistantPage,
@@ -67,6 +74,7 @@ const SUGGESTIONS = [
 
 function AIAssistantPage() {
   const s = useAppState();
+  const askAI = useServerFn(askCareVistaAI);
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -201,7 +209,7 @@ function AIAssistantPage() {
     setLoading(true);
 
     try {
-      const result = await askCareVistaAI({
+      const result = await askAI({
         data: {
           message,
           dashboardContext,
@@ -261,16 +269,20 @@ function AIAssistantPage() {
           </p>
         </div>
 
-        <button
+        <Button
           onClick={clearChat}
           disabled={loading || messages.length === 0}
           className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
         >
           <RefreshCw className="size-4" />
           New conversation
-        </button>
+        </Button>
       </div>
 
+      <CareVistaAIOverview />
+
+      <details className="space-y-4">
+        <summary className="cursor-pointer py-3 text-sm font-semibold text-muted-foreground">Executive summary conversation</summary>
       {/* AI Status Cards */}
 
       <div className="grid gap-3 sm:grid-cols-3">
@@ -291,8 +303,8 @@ function AIAssistantPage() {
         </div>
 
         <div className="panel flex items-center gap-3 p-4">
-          <div className="rounded-xl bg-emerald-500/10 p-3">
-            <Database className="size-5 text-emerald-500" />
+          <div className="rounded-xl bg-ai/10 p-3">
+            <Database className="size-5 text-ai" />
           </div>
 
           <div>
@@ -306,8 +318,8 @@ function AIAssistantPage() {
         </div>
 
         <div className="panel flex items-center gap-3 p-4">
-          <div className="rounded-xl bg-sky-500/10 p-3">
-            <CheckCircle2 className="size-5 text-sky-500" />
+          <div className="rounded-xl bg-info/10 p-3">
+            <CheckCircle2 className="size-5 text-info" />
           </div>
 
           <div>
@@ -346,8 +358,8 @@ function AIAssistantPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-emerald-500">
-            <span className="size-2 rounded-full bg-emerald-500" />
+          <div className="flex items-center gap-1.5 text-xs text-ai">
+            <span className="size-2 rounded-full bg-ai" />
             Ready
           </div>
 
@@ -381,7 +393,7 @@ function AIAssistantPage() {
                   const Icon = item.icon;
 
                   return (
-                    <button
+                    <Button
                       key={item.title}
                       onClick={() => sendMessage(item.question)}
                       disabled={loading}
@@ -398,7 +410,7 @@ function AIAssistantPage() {
                       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                         {item.question}
                       </p>
-                    </button>
+                    </Button>
                   );
                 })}
 
@@ -535,14 +547,14 @@ function AIAssistantPage() {
               className="max-h-32 min-h-12 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-muted-foreground disabled:opacity-50"
             />
 
-            <button
+            <Button
               type="submit"
               disabled={!input.trim() || loading}
               className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Send message"
             >
               <ArrowUp className="size-5" />
-            </button>
+            </Button>
 
           </form>
 
@@ -562,11 +574,13 @@ function AIAssistantPage() {
 
       </div>
 
+      </details>
+
       {/* Healthcare Disclaimer */}
 
-      <div className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+      <div className="flex items-start gap-3 rounded-xl border border-warning/20 bg-warning/5 p-4">
 
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" />
+        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
 
         <div>
           <p className="text-xs font-semibold text-foreground">

@@ -1,5 +1,8 @@
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   Bot,
   Send,
@@ -14,6 +17,7 @@ import {
   Activity,
   CheckCircle2,
   XCircle,
+  UserRound,
 } from "lucide-react";
 
 import {
@@ -37,15 +41,17 @@ type ChatMessage = {
   content: string;
 };
 
-export function CareVistaAIOverview() {
+export function CareVistaAIOverview({ initialQuestions }: { initialQuestions?: readonly string[] } = {}) {
   const s = useAppState();
+  const askAI = useServerFn(askCareVistaAI);
+  const historyRef = useRef<HTMLDivElement>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
       role: "assistant",
       content:
-        "Hello! I'm CareVista AI. I can search patient records, book appointments, update doctor availability, explain medical topics, and analyze hospital notifications. I can also perform supported actions after your confirmation. How can I help?",
+        "Hello, I’m CareVista AI. What would you like to know about your hospital today?",
     },
   ]);
 
@@ -54,6 +60,11 @@ export function CareVistaAIOverview() {
   const [actionBusy, setActionBusy] = useState(false);
   const [pendingAction, setPendingAction] =
     useState<CareVistaAction | null>(null);
+
+  useEffect(() => {
+    const history = historyRef.current;
+    if (history) history.scrollTop = history.scrollHeight;
+  }, [messages, loading, pendingAction]);
 
   // --------------------------------------------------
   // DASHBOARD STATISTICS
@@ -688,7 +699,7 @@ IMPORTANT INSTRUCTIONS:
       // Otherwise, ask Gemini for a normal answer.
       const completeContext = buildCompleteContext(question);
 
-      const result = await askCareVistaAI({
+      const result = await askAI({
         data: {
           message: question,
           dashboardContext: completeContext,
@@ -788,8 +799,8 @@ IMPORTANT INSTRUCTIONS:
   // QUICK QUESTIONS
   // --------------------------------------------------
 
-  const quickQuestions = [
-    "Find patient CV-P1001",
+  const quickQuestions = initialQuestions ?? [
+    `Find patient ${s.patients[0]?.id ?? "CV-P1001"}`,
     "Show admitted patients",
     "Find patients in Cardiology",
     "Show today's appointments",
@@ -807,11 +818,11 @@ IMPORTANT INSTRUCTIONS:
   // --------------------------------------------------
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-primary/20 bg-card shadow-sm">
+    <section className="ai-workspace overflow-hidden" aria-label="CareVista AI assistant">
       {/* HEADER */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-4 sm:p-5">
+      <div className="ai-header flex flex-wrap items-center justify-between gap-3 border-b border-border/70 p-4 sm:p-5">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+          <div className="flex size-11 items-center justify-center rounded-xl bg-ai/15 text-ai shadow-sm">
             <Bot className="size-6" />
           </div>
 
@@ -820,24 +831,24 @@ IMPORTANT INSTRUCTIONS:
               <h2 className="text-base font-bold text-foreground">
                 CareVista AI
               </h2>
-              <Sparkles className="size-4 text-primary" />
+              <Sparkles className="size-4 text-ai" />
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Your intelligent hospital dashboard assistant
+              CareVista Intelligence · Gemini
             </p>
           </div>
         </div>
 
-        <span className="flex items-center gap-2 rounded-full border border-primary/20 bg-background px-3 py-1.5 text-xs font-medium text-primary">
-          <span className="size-2 rounded-full bg-primary" />
-          AI Assistant
+        <span className="flex items-center gap-2 text-xs font-medium text-ai">
+          <span className="size-2 rounded-full bg-ai" />
+          Review-first actions
         </span>
       </div>
 
       <div className="space-y-4 p-4 sm:p-5">
         {/* FIVE MODULES */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="module-strip">
           {[
             {
               title: "Patient Records",
@@ -870,19 +881,17 @@ IMPORTANT INSTRUCTIONS:
             return (
               <div
                 key={module.title}
-                className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
+                className="ai-module"
               >
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Icon className="size-5" />
+                <div className="flex size-6 shrink-0 items-center justify-center text-ai">
+                  <Icon className="size-4" />
                 </div>
 
                 <div>
                   <p className="text-sm font-semibold text-foreground">
                     {module.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {module.description}
-                  </p>
+
                 </div>
               </div>
             );
@@ -894,39 +903,41 @@ IMPORTANT INSTRUCTIONS:
           <div className="mb-2 flex items-center gap-2">
             <Users className="size-4 text-primary" />
             <p className="text-xs font-semibold text-foreground">
-              Try asking CareVista AI
+              Suggested questions
             </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
             {quickQuestions.map((question) => (
-              <button
+              <Button
+                variant="outline"
                 key={question}
                 type="button"
                 disabled={loading || !!pendingAction}
                 onClick={() => setInput(question)}
-                className="rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary disabled:opacity-50"
+                className="h-auto whitespace-normal px-3 py-2 text-xs"
               >
                 {question}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
 
         {/* CHAT MESSAGES */}
-        <div className="max-h-[380px] min-h-[180px] space-y-3 overflow-y-auto rounded-xl bg-muted/30 p-3 sm:p-4">
+        <div ref={historyRef} role="log" aria-live="polite" className="chat-history space-y-3 rounded-lg bg-background/50 p-3 sm:p-4">
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${
+              className={`flex items-start gap-2 ${
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
+              {message.role === "assistant" && <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-ai/10 text-ai"><Bot className="size-4" /></span>}
               <div
-                className={`max-w-[90%] whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-sm leading-6 ${
+                className={`max-w-[85%] whitespace-pre-wrap break-words rounded-lg px-4 py-3 text-sm leading-6 ${
                   message.role === "user"
                     ? "rounded-br-sm bg-primary text-primary-foreground"
-                    : "rounded-bl-sm border border-border bg-card text-foreground"
+                    : "ai-bubble rounded-bl-sm"
                 }`}
               >
                 {message.role === "assistant" && (
@@ -936,8 +947,9 @@ IMPORTANT INSTRUCTIONS:
                   </div>
                 )}
 
-                {message.content}
+                {message.role === "assistant" ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown> : message.content}
               </div>
+              {message.role === "user" && <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-primary/15 text-primary"><UserRound className="size-4" /></span>}
             </div>
           ))}
 
@@ -953,7 +965,7 @@ IMPORTANT INSTRUCTIONS:
 
         {/* ACTION CONFIRMATION */}
         {pendingAction && (
-          <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
+          <div className="action-review p-4" role="region" aria-label="Proposed hospital operation">
             <div className="mb-2 flex items-center gap-2">
               <Sparkles className="size-4 text-primary" />
 
@@ -962,9 +974,11 @@ IMPORTANT INSTRUCTIONS:
               </p>
             </div>
 
-            <p className="mb-4 text-sm leading-6 text-foreground">
-              {pendingAction.summary}
-            </p>
+            <dl className="mb-3 grid gap-2 text-xs sm:grid-cols-2">
+              <div><dt className="text-muted-foreground">Action type</dt><dd className="mt-1 font-semibold">{({createPatient: "Create patient", updatePatient: "Update patient", saveAppointment: "Appointment change", updateDoctor: "Doctor availability", acknowledgeAlert: "Acknowledge alert", resolveAlert: "Resolve alert"})[pendingAction.kind]}</dd></div>
+              <div><dt className="text-muted-foreground">Target record</dt><dd className="mt-1 font-semibold">{"id" in pendingAction && pendingAction.id ? pendingAction.id : pendingAction.kind === "createPatient" ? pendingAction.payload.name : pendingAction.kind === "saveAppointment" ? pendingAction.payload.patientId : "New record"}</dd></div>
+            </dl>
+            <p className="mb-4 text-sm leading-6 text-foreground">{pendingAction.summary}</p>
 
             <div className="flex flex-wrap gap-2">
               <Button
@@ -1008,6 +1022,7 @@ IMPORTANT INSTRUCTIONS:
             <MessageSquare className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
             <input
+              aria-label="Message CareVista AI"
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Ask about patients, appointments, doctors or medical topics..."
@@ -1018,6 +1033,7 @@ IMPORTANT INSTRUCTIONS:
           </div>
 
           <Button
+            aria-label="Send message"
             type="submit"
             disabled={!input.trim() || loading || !!pendingAction}
             className="h-11 shrink-0 gap-2 rounded-xl px-4"

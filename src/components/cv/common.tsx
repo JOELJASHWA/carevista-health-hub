@@ -5,6 +5,7 @@ import { useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { resolveMedia } from "@/lib/media";
 import { initials } from "@/lib/format";
 import type { AlertSeverity, Availability, AppointmentStatus, BedStatus, PatientStatus, Risk } from "@/data/types";
 
@@ -71,7 +72,7 @@ export function PatientAvatar({ name, seed, size = "md" }: { name: string; seed:
 
 export function DoctorPhoto({ src, name, size = "md", className }: { src: string; name: string; size?: "sm" | "md" | "lg" | "xl"; className?: string }) {
   const sz = { sm: "size-8", md: "size-10", lg: "size-16", xl: "size-24" }[size];
-  return <img src={src} alt={`Portrait of ${name} (fictional demo profile)`} className={cn("shrink-0 rounded-full object-cover ring-2 ring-border", sz, className)} loading="lazy" width={96} height={96} />;
+  return <img src={resolveMedia(src)} alt={`Portrait of ${name} (fictional demo profile)`} className={cn("shrink-0 rounded-full object-cover ring-2 ring-border", sz, className)} loading="lazy" width={96} height={96} />;
 }
 
 export function PageHeader({ title, description, crumbs, actions }: { title: string; description?: string; crumbs?: { label: string; to?: string }[]; actions?: ReactNode }) {
@@ -114,10 +115,11 @@ const kpiTone: Record<Tone, string> = {
 
 export function KpiCard({ label, value, sub, icon: Icon, tone = "primary", onClick, delta }: { label: string; value: ReactNode; sub?: ReactNode; icon: LucideIcon; tone?: Tone; onClick?: () => void; delta?: number }) {
   return (
-    <button
+    <Button
+      variant="ghost"
       type="button"
       onClick={onClick}
-      className="panel group flex w-full flex-col gap-3 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-glow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      className="panel group h-auto whitespace-normal flex w-full items-stretch flex-col gap-3 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-glow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div className="flex items-center justify-between">
         <span className="eyebrow">{label}</span>
@@ -130,7 +132,7 @@ export function KpiCard({ label, value, sub, icon: Icon, tone = "primary", onCli
         <span className="truncate">{sub}</span>
         {delta !== undefined ? <Trend change={delta} /> : <ArrowRight className="size-3.5 opacity-0 transition group-hover:opacity-100" />}
       </div>
-    </button>
+    </Button>
   );
 }
 
@@ -274,7 +276,7 @@ export function Segmented<T extends string>({ value, onChange, options, size = "
           )}
         >
           {o.label}
-        </button>
+        </Button>
       ))}
     </div>
   );
