@@ -110,7 +110,7 @@ export async function generateAIResponse(
   const ai = new GoogleGenAI({ apiKey });
 
   const model =
-    process.env["GEMINI_MODEL"] || "gemini-flash-latest";
+    process.env["GEMINI_MODEL"] || "gemini-3.5-flash-lite";
 
   const contents = `
 ${SYSTEM_INSTRUCTIONS}
@@ -186,8 +186,20 @@ ${message.trim()}
     finalMessage.includes("quota") ||
     finalMessage.includes("resource_exhausted")
   ) {
+    // SDK errors wrap Google's response as JSON. Preserve the provider's
+    // quota message, but never expose the credential or a credential URL.
+    let providerMessage = finalError.message;
+    try {
+      const body = JSON.parse(providerMessage) as { error?: { message?: string } };
+      providerMessage = body.error?.message ?? providerMessage;
+    } catch {
+      // Non-JSON SDK errors still carry the original provider message.
+    }
+    providerMessage = providerMessage
+      .split(apiKey).join("[redacted]")
+      .replace(/([?&]key=)[^&\s]+/gi, "$1[redacted]");
     throw new Error(
-      "Gemini API quota reached. Check your Google AI Studio usage.",
+      `Gemini quota error (HTTP ${finalError.status ?? 429}, model ${model}):\n${providerMessage}`,
     );
   }
 
