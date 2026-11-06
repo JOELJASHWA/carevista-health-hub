@@ -264,7 +264,8 @@ export function Segmented<T extends string>({ value, onChange, options, size = "
   return (
     <div role="tablist" className="inline-flex flex-wrap rounded-lg border border-border bg-surface p-0.5">
       {options.map((o) => (
-        <button
+        <Button
+          variant="ghost"
           key={o.value}
           role="tab"
           aria-selected={value === o.value}
