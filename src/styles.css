@@ -6,7 +6,7 @@
 
 /*
  * CareVista design system.
- * Dark theme is the default (html.dark). Light theme values live in :root.
+ * Cloud White is the default. The optional dark theme lives in .dark.
  * All colors use oklch. Register new tokens in @theme inline.
  */
 
@@ -75,26 +75,26 @@
 /* Light theme */
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.975 0.006 240);
+  --background: oklch(0.987 0.002 248);
   --foreground: oklch(0.2 0.03 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2 0.03 260);
-  --surface: oklch(0.955 0.009 245);
+  --surface: oklch(0.944 0.009 255);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.03 260);
-  --primary: oklch(0.6 0.12 182);
-  --primary-foreground: oklch(0.99 0.005 180);
+  --primary: oklch(0.623 0.188 259.815);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.94 0.012 245);
   --secondary-foreground: oklch(0.25 0.03 260);
   --muted: oklch(0.945 0.01 245);
-  --muted-foreground: oklch(0.5 0.03 257);
-  --accent: oklch(0.93 0.03 190);
-  --accent-foreground: oklch(0.3 0.06 190);
+  --muted-foreground: oklch(0.48 0.03 257);
+  --accent: oklch(0.95 0.025 255);
+  --accent-foreground: oklch(0.43 0.15 260);
   --info: oklch(0.62 0.14 233);
   --info-foreground: oklch(0.99 0 0);
-  --success: oklch(0.62 0.17 150);
+  --success: oklch(0.5 0.14 150);
   --success-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.7 0.16 65);
+  --warning: oklch(0.55 0.14 65);
   --warning-foreground: oklch(0.2 0.03 60);
   --critical: oklch(0.58 0.21 25);
   --critical-foreground: oklch(0.99 0 0);
@@ -102,30 +102,33 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.9 0.012 250);
   --input: oklch(0.9 0.012 250);
-  --ring: oklch(0.6 0.12 182);
-  --chart-1: oklch(0.6 0.12 182);
+  --ring: oklch(0.623 0.188 259.815);
+  --chart-1: oklch(0.623 0.188 259.815);
   --chart-2: oklch(0.62 0.14 233);
   --chart-3: oklch(0.7 0.16 65);
   --chart-4: oklch(0.58 0.21 25);
   --chart-5: oklch(0.62 0.17 150);
   --chart-6: oklch(0.6 0.12 290);
-  --sidebar: oklch(0.99 0.003 245);
+  --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.3 0.03 260);
-  --sidebar-primary: oklch(0.6 0.12 182);
+  --sidebar-primary: oklch(0.623 0.188 259.815);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.945 0.02 190);
-  --sidebar-accent-foreground: oklch(0.3 0.06 190);
+  --sidebar-accent: oklch(0.95 0.025 255);
+  --sidebar-accent-foreground: oklch(0.43 0.15 260);
   --sidebar-border: oklch(0.91 0.012 250);
-  --sidebar-ring: oklch(0.6 0.12 182);
+  --sidebar-ring: oklch(0.623 0.188 259.815);
   --shadow-card-value: 0 1px 2px oklch(0.2 0.03 260 / 6%), 0 8px 24px -12px oklch(0.2 0.03 260 / 14%);
-  --shadow-glow-value: 0 0 0 1px oklch(0.6 0.12 182 / 35%), 0 8px 30px -10px oklch(0.6 0.12 182 / 45%);
+  --shadow-glow-value: 0 0 0 1px oklch(0.623 0.188 259.815 / 20%), 0 8px 24px -10px oklch(0.623 0.188 259.815 / 30%);
   --grid-line: oklch(0.2 0.03 260 / 8%);
   --ecg-bg: oklch(0.2 0.03 200);
   --ecg-grid: oklch(0.55 0.12 182 / 18%);
   --ecg-line: oklch(0.82 0.15 170);
+  --ai: oklch(0.48 0.085 183);
+  --quiet: oklch(0.704 0.04 256.788);
+  --imaging: oklch(0 0 0);
 }
 
-/* Dark theme (default) */
+/* Optional dark theme */
 .dark {
   --background: oklch(0.169103 0.036483 269.7521);
   --foreground: oklch(0.984152 0.003413 247.8575);
@@ -296,7 +299,7 @@
   }
 }
 
-/* Midnight Indigo dashboard and assistant surfaces. */
+/* Theme-aware dashboard and assistant surfaces. */
 @utility ai-workspace { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); box-shadow: var(--shadow-card-value); }
 @utility ai-header { background: linear-gradient(110deg, color-mix(in oklab, var(--primary) 12%, var(--card)), var(--card)); }
 @utility module-strip { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -304,5 +307,5 @@
 @utility chat-history { height: 260px; overflow-y: auto; scrollbar-gutter: stable; }
 @utility ai-bubble { border: 1px solid var(--border); background: var(--surface); color: var(--foreground); }
 @utility action-review { background: color-mix(in oklab, var(--primary) 8%, var(--background)); border: 1px solid color-mix(in oklab, var(--primary) 50%, var(--border)); border-radius: var(--radius-lg); }
-@layer base { html { color-scheme: dark; } h1,h2,h3,h4 { letter-spacing: 0; } }
+@layer base { html { color-scheme: light; } html.dark { color-scheme: dark; } h1,h2,h3,h4 { letter-spacing: 0; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }

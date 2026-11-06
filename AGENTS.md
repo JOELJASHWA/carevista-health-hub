@@ -34,3 +34,4 @@ use the editor.
 - Retain the source TypeScript optional-property and indexed-access settings with strict mode enabled, because source store/types must remain unmodified.
 - Keep Gemini requests in server-only helpers reached through server functions; client action parsing only stages proposals and execution remains gated by explicit UI confirmation.
 - Resolve imported medical media through asset pointers without rewriting the source dataset.
+- Apply appearance-default migrations in the shared shell, not the preserved source store; migrate once and honor later user theme choices.

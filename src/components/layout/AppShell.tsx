@@ -244,6 +244,15 @@ function ResetDemoItem() {
 export function useThemeSync() {
   const theme = useAppState().settings.theme;
   useEffect(() => {
+    // Apply the selected new appearance once without replacing source store defaults.
+    if (!window.localStorage.getItem("carevista:cloud-white")) {
+      window.localStorage.setItem("carevista:cloud-white", "1");
+      window.localStorage.setItem("carevista:theme", "light");
+      if (theme !== "light") {
+        updateSettings({ theme: "light" });
+        return;
+      }
+    }
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.style.colorScheme = theme;
   }, [theme]);

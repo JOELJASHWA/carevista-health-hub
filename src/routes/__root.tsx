@@ -66,7 +66,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
-const THEME_SCRIPT = `try{var t=localStorage.getItem('carevista:theme');if(t==='light'){document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light'}}catch(e){}`;
+const THEME_SCRIPT = `try{var migrated=localStorage.getItem('carevista:cloud-white');var t=migrated?localStorage.getItem('carevista:theme'):'light';document.documentElement.classList.toggle('dark',t==='dark')}catch(e){}`;
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
