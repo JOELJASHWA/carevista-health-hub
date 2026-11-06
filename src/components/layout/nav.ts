@@ -22,13 +22,13 @@ import {
 
 export const MAIN_NAV = [
   { title: "Overview", url: "/", icon: LayoutDashboard },
-  { title: "Doctors", url: "/doctors", icon: Stethoscope },
   { title: "Patients", url: "/patients", icon: Users },
+  { title: "Doctors", url: "/doctors", icon: Stethoscope },
   { title: "Appointments", url: "/appointments", icon: CalendarDays },
   { title: "Clinical Monitoring", url: "/monitoring", icon: HeartPulse },
-  { title: "Bed Management", url: "/beds", icon: BedDouble },
+  { title: "Beds", url: "/beds", icon: BedDouble },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Alerts & Notifications", url: "/alerts", icon: Bell },
+  { title: "Notifications", url: "/alerts", icon: Bell },
   { title: "Reports", url: "/reports", icon: FileText },
   { title: "Settings", url: "/settings", icon: Settings },
 ] as const;

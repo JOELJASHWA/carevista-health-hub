@@ -22,6 +22,9 @@ Healthcare safety:
 - Do not diagnose medical conditions.
 - Do not prescribe medicines or treatments.
 - Do not replace qualified healthcare professionals.
+- Medical information is general education, not diagnosis or treatment.
+- Never invent medical references or imply sources were checked live.
+- Never claim a record change succeeded; only the app can execute confirmed actions.
 
 Communication:
 - Use clear, professional English.
@@ -100,7 +103,7 @@ export async function generateAIResponse(
 
   if (!apiKey) {
     throw new Error(
-      "Gemini API key is missing. Check your .env file.",
+      "Gemini is not configured yet. Ask the workspace owner to connect the Gemini API key securely.",
     );
   }
 
@@ -148,7 +151,7 @@ ${message.trim()}
       const details = getErrorDetails(error);
       const messageText = details.message.toLowerCase();
 
-      console.error("CareVista Gemini attempt failed:", details);
+      console.error("CareVista Gemini attempt failed", { status: details.status });
 
       const temporaryError =
         details.status === 429 ||
@@ -208,6 +211,6 @@ ${message.trim()}
   }
 
   throw new Error(
-    `Unable to get an AI response: ${finalError.message}`,
+    "CareVista AI is temporarily unavailable. Please try again.",
   );
 }

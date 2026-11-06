@@ -335,8 +335,8 @@ function Overview() {
     <div className="space-y-6">
       {/* Page heading */}
       <PageHeader
-        title="Hospital Command Overview"
-        description="Monitor hospital performance, patient activity, physician workload and clinical risk from one central dashboard."
+        title="Hospital Overview"
+        description="Patient care, hospital activity, and operational intelligence."
         crumbs={[{ label: "Overview" }]}
         actions={
           <Button asChild size="sm" variant="outline">
@@ -349,8 +349,6 @@ function Overview() {
 
       <DemoNote />
 
-      {/* CareVista AI Assistant */}
-      <CareVistaAIOverview />
 
       {/* Filters */}
       <div className="panel flex flex-col justify-between gap-4 rounded-xl p-4 sm:flex-row sm:items-center">
@@ -400,7 +398,8 @@ function Overview() {
                 "all",
               ] as const
             ).map((period) => (
-              <button
+              <Button
+                variant="ghost"
                 key={period}
                 onClick={() => setTimeFilter(period)}
                 className={`rounded-lg px-3 py-2 text-xs font-semibold transition-all ${
@@ -418,7 +417,7 @@ function Overview() {
                       : period === "90d"
                         ? "90 Days"
                         : "All Time"}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -477,7 +476,7 @@ function Overview() {
           />
 
           <KpiCard
-            label="Critical Risk Status"
+            label="Critical Patients"
             value={k.critical}
             sub="Requires immediate attention"
             icon={AlertTriangle}
@@ -488,7 +487,7 @@ function Overview() {
           />
 
           <KpiCard
-            label="Available Physicians"
+            label="Available Doctors"
             value={`${k.availableDocs}/${s.doctors.length}`}
             sub="Currently available"
             icon={Stethoscope}
@@ -499,7 +498,7 @@ function Overview() {
           />
 
           <KpiCard
-            label="Consultations Booked"
+            label="Total Appointments"
             value={s.appointments.length}
             sub={`${k.upcomingAppts} upcoming`}
             icon={CalendarDays}
@@ -960,6 +959,9 @@ function Overview() {
           </Panel>
         </div>
       </section>
+
+      {/* CareVista AI Assistant */}
+      <CareVistaAIOverview />
 
       {/* Recent admissions and critical alerts */}
       <section className="grid min-w-0 gap-5 xl:grid-cols-3">
