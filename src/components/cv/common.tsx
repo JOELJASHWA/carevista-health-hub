@@ -119,7 +119,8 @@ export function KpiCard({ label, value, sub, icon: Icon, tone = "primary", onCli
       variant="ghost"
       type="button"
       onClick={onClick}
-      className="panel group h-auto whitespace-normal flex w-full items-stretch flex-col gap-3 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-glow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      data-tone={tone}
+      className="panel dashboard-kpi group h-auto whitespace-normal flex w-full items-stretch flex-col gap-3 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-glow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div className="flex items-center justify-between">
         <span className="eyebrow">{label}</span>

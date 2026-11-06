@@ -79,6 +79,10 @@
   --foreground: oklch(0.2 0.03 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2 0.03 260);
+  --panel-background: oklch(0.977 0.007 250);
+  --panel-border: oklch(0.84 0.021 252);
+  --kpi-tint: 7%;
+  --kpi-border-tint: 24%;
   --surface: oklch(0.944 0.009 255);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.03 260);
@@ -134,6 +138,10 @@
   --foreground: oklch(0.984152 0.003413 247.8575);
   --card: oklch(0.278543 0.051659 268.9138);
   --card-foreground: oklch(0.984152 0.003413 247.8575);
+  --panel-background: var(--card);
+  --panel-border: var(--border);
+  --kpi-tint: 5%;
+  --kpi-border-tint: 16%;
   --surface: oklch(0.309428 0.050765 267.8984);
   --popover: oklch(0.309428 0.050765 267.8984);
   --popover-foreground: oklch(0.984152 0.003413 247.8575);
@@ -213,11 +221,22 @@
 }
 
 @utility panel {
-  background-color: var(--card);
+  background-color: var(--panel-background);
   color: var(--card-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card-value);
+}
+
+@utility dashboard-kpi {
+  --kpi-accent: var(--primary);
+  background-color: color-mix(in oklab, var(--kpi-accent) var(--kpi-tint), var(--card));
+  border-color: color-mix(in oklab, var(--kpi-accent) var(--kpi-border-tint), var(--panel-border));
+  &[data-tone="critical"] { --kpi-accent: var(--critical); }
+  &[data-tone="warning"] { --kpi-accent: var(--warning); }
+  &[data-tone="success"] { --kpi-accent: var(--success); }
+  &[data-tone="info"] { --kpi-accent: var(--info); }
+  &[data-tone="muted"] { --kpi-accent: var(--quiet); }
 }
 
 @utility num {
