@@ -1,11 +1,14 @@
 {
   "source": "carevista-healthcare-platform-main-main.zip",
   "capabilities": [
-    {"capability":"application code and routes","source":"uploaded archive","outcome":"import existing TanStack application","status":"in_progress","next_action":"copy inspected source and preserve target runtime"},
-    {"capability":"hospital records and state","source":"source store and seeded dataset","outcome":"preserve existing store and data without alteration","status":"in_progress","next_action":"inspect persistence and verify record workflows"},
-    {"capability":"Gemini integration","source":"source AI server functions","outcome":"preserve provider and server-only configuration","status":"pending","next_action":"verify configuration securely"},
-    {"capability":"AI action confirmation","source":"source parser and execution UI","outcome":"preserve confirmation and cancellation gates","status":"in_progress","next_action":"audit and test supported actions"},
-    {"capability":"design and responsive views","source":"uploaded redesign brief","outcome":"Midnight Indigo theme on existing components","status":"in_progress","next_action":"apply tokens and verify desktop and phone"},
-    {"capability":"production verification","source":"imported application","outcome":"test routes, records and AI","status":"pending","next_action":"run tests and browser flows"}
+    {"capability":"application code and routes","source":"uploaded archive","outcome":"imported existing TanStack application; every source page opened in browser","status":"verified","next_action":null},
+    {"capability":"hospital records and state","source":"synthetic seed and browser-local source store","outcome":"original store and types byte-identical; confirmed doctor change saved and read back through profile","status":"verified","next_action":null},
+    {"capability":"Gemini integration and five modules","source":"source AI server functions and contextual assistant","outcome":"Gemini retained with server-only key configuration; modules preserved and shared action-aware assistant available on both pages","status":"blocked","next_action":"configure GEMINI_API_KEY securely and verify live responses; key entry declined"},
+    {"capability":"AI action confirmation","source":"source parser and execution UI","outcome":"five safety tests passed; browser cancellation left records unchanged and confirmation updated the exact doctor","status":"verified","next_action":null},
+    {"capability":"design and responsive views","source":"uploaded redesign brief","outcome":"exact Midnight Indigo tokens; desktop charts, phone layout and navigation checked; phone width has no overflow","status":"verified","next_action":null},
+    {"capability":"source media","source":"ten portraits and four radiographs","outcome":"all bytes retained via asset pointers; portrait loads in doctor profile","status":"verified","next_action":null},
+    {"capability":"schema, application records and auth identities migration","source":"no external database or auth provider in source","outcome":"not applicable to this browser-local synthetic demonstration; source state intentionally preserved","status":"not_applicable","next_action":null},
+    {"capability":"external storage, email, payments, public APIs, callbacks, webhooks, schedules and cutover","source":"source capability inspection","outcome":"no source production integrations detected outside Gemini","status":"not_applicable","next_action":null},
+    {"capability":"runtime and build verification","source":"imported application","outcome":"six tests passed; build OK; all source routes and representative patient/doctor detail pages render with no browser runtime errors","status":"verified","next_action":null}
   ]
 }

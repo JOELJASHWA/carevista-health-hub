@@ -526,7 +526,7 @@ export function parseCareVistaAction(
         kind: "updateDoctor",
         id,
         availability: availability as DoctorAvailability,
-        summary: `Change Dr. ${doctor.name}'s availability from ${doctor.availability} to ${availability}.`,
+        summary: `Change ${doctor.name}'s availability from ${doctor.availability} to ${availability}.`,
       },
     };
   }
